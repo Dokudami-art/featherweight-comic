@@ -8,6 +8,12 @@
   "width": 1600,
   "totalHeight": 80000,
   "quality": 88,
+  "coverBox": [
+    130,
+    250,
+    730,
+    850
+  ],
   "slices": [
     {
       "file": "001.webp",

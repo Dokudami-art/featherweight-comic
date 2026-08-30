@@ -16,9 +16,6 @@ HEAD = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap">
 <link rel="stylesheet" href="{root}assets/css/site.css">
 </head>
 <body class="{cls}">
@@ -28,7 +25,8 @@ def nav(root, here=""):
     def a(href, label, key):
         cur = ' aria-current="page"' if key == here else ""
         return f'<a href="{root}{href}"{cur}>{label}</a>'
-    return ('<nav class="sitenav"><span class="wordmark">Featherweight Comic</span>'
+    return (f'<nav class="sitenav"><img class="wordmark" src="{root}assets/img/wordmark.png" '
+            f'alt="Featherweight" width="900" height="567">'
             f'<span class="navlinks">{a("index.html","Home","home")}'
             f'{a("chapters.html","Chapters","chapters")}'
             f'{a("about.html","About","about")}</span></nav>')
@@ -80,7 +78,7 @@ def home(m):
         p.append('<section class="latest"><h2 class="lede">Latest chapter</h2>')
         p.append(f'<a class="chapcard wide" href="read/{latest["id"]}/">')
         p.append(f'<img src="comic/{latest["id"]}/{latest["cover"]}" alt="" '
-                 f'width="400" height="500" loading="lazy">')
+                 f'width="800" height="800" loading="lazy">')
         p.append('<div class="chapmeta">'
                  f'<span class="num">Chapter {latest["number"]}</span>'
                  f'<span class="ctitle">{e(latest["title"])}</span>'
@@ -118,7 +116,7 @@ def chapters_page(m):
         for c in chs:
             p.append(f'<a class="chapcard" href="read/{c["id"]}/">')
             p.append(f'<img src="comic/{c["id"]}/{c["cover"]}" alt="" '
-                     f'width="400" height="500" loading="lazy">')
+                     f'width="800" height="800" loading="lazy">')
             p.append('<div class="chapmeta">'
                      f'<span class="num">Chapter {c["number"]}</span>'
                      f'<span class="ctitle">{e(c["title"])}</span>'

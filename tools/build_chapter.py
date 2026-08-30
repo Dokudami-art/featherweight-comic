@@ -112,13 +112,14 @@ class Strips:
         return out
 
 # ---------------------------------------------------------------- build
-def build_chapter(cid, title, number, quality, slice_h, status, published):
+def build_chapter(cid, title, number, quality, slice_h, status, published, cover_box=None):
     src_dir = SOURCE / cid
     if not src_dir.is_dir():
         sys.exit(f"No source folder: source/{cid}/")
     paths = sorted(
         [p for p in src_dir.iterdir()
-         if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff")],
+         if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff")
+         and p.stem.lower() != "cover"],          # cover art is not a page of the chapter
         key=natural_key)
     if not paths:
         sys.exit(f"No images in source/{cid}/")
@@ -133,10 +134,24 @@ def build_chapter(cid, title, number, quality, slice_h, status, published):
     out_dir = COMIC / cid
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    # cover: top of the chapter, cropped 4:5
-    cov_h = min(int(strips.width * 1.25), strips.total)
-    cover = strips.window(0, cov_h).resize((400, int(400 * cov_h / strips.width)), Image.LANCZOS)
-    cover.save(out_dir / "cover.webp", "WEBP", quality=82, method=5)
+    # cover: a custom square image if source/<id>/cover.* exists, else the top of the chapter
+    custom = next((q for q in sorted(src_dir.glob("cover.*"))
+                   if q.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")), None)
+    if custom:
+        with Image.open(custom) as raw:
+            cim = prepare(raw)
+        if cover_box:
+            cim = cim.crop(tuple(cover_box))
+        side = min(cim.size)                      # centre-crop to square
+        l = (cim.width - side) // 2; t = (cim.height - side) // 2
+        cover = cim.crop((l, t, l + side, t + side))
+        log(f"      cover from {custom.name}"
+            + (f" box={tuple(cover_box)}" if cover_box else " (centre square)"))
+    else:
+        side = min(strips.width, strips.total)
+        cover = strips.window(0, side)
+    cover = cover.resize((800, 800), Image.LANCZOS)
+    cover.save(out_dir / "cover.webp", "WEBP", quality=84, method=5)
 
     slices, total_bytes, n = [], 0, 0
     y = 0
@@ -175,7 +190,7 @@ def build_chapter(cid, title, number, quality, slice_h, status, published):
         "id": cid, "number": number, "title": title,
         "published": published, "status": status, "cover": "cover.webp",
         "width": strips.width, "totalHeight": strips.total,
-        "quality": quality, "slices": slices,
+        "quality": quality, "coverBox": cover_box, "slices": slices,
     }
     (out_dir / "chapter.json").write_text(json.dumps(chapter, indent=2) + "\n", encoding="utf-8")
     return chapter
@@ -190,6 +205,8 @@ def main():
     ap.add_argument("--slice-height", type=int, default=DEFAULT_SLICE_H)
     ap.add_argument("--status", choices=["published", "draft"], default="published")
     ap.add_argument("--date", default=None, help="YYYY-MM-DD (default: today)")
+    ap.add_argument("--cover-box", default=None,
+                    help="crop box for source/<id>/cover.*  as left,top,right,bottom")
     ap.add_argument("--regen", action="store_true", help="rebuild pages only")
     a = ap.parse_args()
 
@@ -209,7 +226,13 @@ def main():
         published = a.date or (existing["published"] if existing
                                else datetime.date.today().isoformat())
         log(f"Building {cid} - \"{title}\"")
-        ch = build_chapter(cid, title, number, a.quality, a.slice_height, a.status, published)
+        box = None
+        if a.cover_box:
+            box = [int(v) for v in a.cover_box.split(",")]
+        elif existing and existing.get("coverBox"):
+            box = existing["coverBox"]          # reuse what was set last time
+        ch = build_chapter(cid, title, number, a.quality, a.slice_height,
+                           a.status, published, box)
         m["chapters"] = [c for c in m["chapters"] if c["id"] != cid] + [ch]
         m["chapters"].sort(key=lambda c: c["number"])
         save_manifest(m)

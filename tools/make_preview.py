@@ -102,13 +102,12 @@ def main():
         js = js.replace(old, new, 1)
 
     out = f"""<title>Featherweight Preview</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap">
 <style>
 {css}
 /* ---- preview shell only: not part of the real site ---- */
 .pv-page[hidden]{{display:none}}
+:root[data-theme="dark"] .wordmark{{filter:invert(1)}}
+:root[data-theme="light"] .wordmark{{filter:none}}
 /* the artifact viewer stamps an explicit theme; map it onto the site's tokens */
 :root[data-theme="dark"]{{
   --bg:#111317; --surface:#181b20; --ink:#e6e8ec; --muted:#949cab;

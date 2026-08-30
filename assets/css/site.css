@@ -15,8 +15,6 @@
   --bar:rgba(255,255,255,.94);
   --maxw:940px;
   --strip:800px;         /* reading column width */
-  /* Wordmark face — swap this one line to change the logo font */
-  --wordmark-font:"Patrick Hand","Bradley Hand","Segoe Print",cursive;
 }
 @media (prefers-color-scheme: dark){
   :root{
@@ -44,14 +42,14 @@ img{max-width:100%}
 /* ---------------------------------------------------------- site chrome */
 .sitenav{
   display:flex;align-items:center;justify-content:space-between;gap:1rem;
-  max-width:var(--maxw);margin:0 auto;padding:1.1rem 1.25rem;
+  max-width:var(--maxw);margin:0 auto;padding:1rem 1.25rem;
   border-bottom:1px solid var(--line);
 }
 .wordmark{
-  font-family:var(--wordmark-font);
-  font-size:1.5rem;font-weight:400;letter-spacing:0;line-height:1;
-  color:var(--ink);white-space:nowrap;
+  display:block;width:clamp(132px,20vw,172px);height:auto;flex:none;
 }
+/* the lettering is black artwork; invert it to white on a dark ground */
+@media (prefers-color-scheme: dark){ .wordmark{filter:invert(1)} }
 .navlinks{display:flex;gap:1.2rem;font-size:.92rem}
 .navlinks a{text-decoration:none;color:var(--muted)}
 .navlinks a:hover,.navlinks a[aria-current]{color:var(--ink)}
@@ -107,11 +105,11 @@ img{max-width:100%}
 .chapgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.4rem}
 .chapcard{text-decoration:none;color:inherit;display:block}
 .chapcard img{
-  display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;
+  display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;
   border:1px solid var(--line);border-radius:4px;background:var(--surface);
 }
 .chapcard.wide{display:flex;gap:1.2rem;align-items:center}
-.chapcard.wide img{width:132px;flex:none}
+.chapcard.wide img{width:150px;flex:none}
 .chapmeta{display:flex;flex-direction:column;gap:.15rem;padding-top:.65rem}
 .chapcard.wide .chapmeta{padding-top:0}
 .num{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
