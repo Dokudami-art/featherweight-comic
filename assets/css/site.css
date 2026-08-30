@@ -46,7 +46,7 @@ img{max-width:100%}
   border-bottom:1px solid var(--line);
 }
 .wordmark{
-  display:block;width:clamp(132px,20vw,172px);height:auto;flex:none;
+  display:block;width:clamp(100px,14vw,128px);height:auto;flex:none;
 }
 /* the lettering is black artwork; invert it to white on a dark ground */
 @media (prefers-color-scheme: dark){ .wordmark{filter:invert(1)} }
