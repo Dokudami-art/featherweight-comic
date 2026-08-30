@@ -1,0 +1,10 @@
+# Original art. Large, and the master copies — these never go to GitHub.
+source/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.clip
+*.psd
+*.procreate
+__pycache__/

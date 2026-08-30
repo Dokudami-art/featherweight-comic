@@ -1,0 +1,190 @@
+/* ------------------------------------------------------------------
+   Featherweight — prototype stylesheet.
+   Deliberately plain: this is the file we restyle later. Everything
+   structural lives here, so changing the look means changing only this.
+   ------------------------------------------------------------------ */
+
+:root{
+  --bg:#ffffff;
+  --surface:#f5f5f6;
+  --ink:#16181c;
+  --muted:#6a7280;
+  --line:#e2e4e8;
+  --accent:#2f6db4;
+  --reader-bg:#e8e9eb;   /* the field the comic sits on */
+  --bar:rgba(255,255,255,.94);
+  --maxw:940px;
+  --strip:800px;         /* reading column width */
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#111317; --surface:#181b20; --ink:#e6e8ec; --muted:#949cab;
+    --line:#282c33; --accent:#79aeea; --reader-bg:#0c0d10;
+    --bar:rgba(17,19,23,.94);
+  }
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none!important;transition:none!important}
+}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+img{max-width:100%}
+
+/* ---------------------------------------------------------- site chrome */
+.sitenav{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  max-width:var(--maxw);margin:0 auto;padding:1.1rem 1.25rem;
+  border-bottom:1px solid var(--line);
+}
+.wordmark{font-weight:700;font-size:1.05rem;letter-spacing:-.01em;text-decoration:none;color:var(--ink)}
+.navlinks{display:flex;gap:1.2rem;font-size:.92rem}
+.navlinks a{text-decoration:none;color:var(--muted)}
+.navlinks a:hover,.navlinks a[aria-current]{color:var(--ink)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.25rem 5rem}
+.sitefoot{
+  border-top:1px solid var(--line);margin-top:3rem;
+  padding:1.5rem 1.25rem;color:var(--muted);font-size:.85rem;text-align:center;
+}
+.lede{
+  font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;margin:0 0 .9rem;
+}
+.pagetitle{font-size:1.9rem;letter-spacing:-.02em;margin:2.4rem 0 1.6rem}
+
+/* ------------------------------------------------------------ home */
+.hero{padding:4rem 0 3rem;border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(2.4rem,7vw,3.6rem);letter-spacing:-.03em;margin:0;line-height:1.05}
+.tagline{color:var(--muted);font-size:1.1rem;margin:.8rem 0 0;max-width:34rem}
+.btn{
+  display:inline-block;margin-top:1.8rem;padding:.75rem 1.5rem;
+  background:var(--ink);color:var(--bg);text-decoration:none;
+  border-radius:4px;font-weight:600;font-size:.95rem;
+}
+.btn:hover{opacity:.85}
+.latest,.recent{margin-top:2.6rem}
+.allink{margin-top:2.4rem;font-size:.92rem}
+.allink a{text-decoration:none}
+
+/* --------------------------------------------------------- chapters */
+.chapgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.4rem}
+.chapcard{text-decoration:none;color:inherit;display:block}
+.chapcard img{
+  display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;
+  border:1px solid var(--line);border-radius:4px;background:var(--surface);
+}
+.chapcard.wide{display:flex;gap:1.2rem;align-items:center}
+.chapcard.wide img{width:132px;flex:none}
+.chapmeta{display:flex;flex-direction:column;gap:.15rem;padding-top:.65rem}
+.chapcard.wide .chapmeta{padding-top:0}
+.num{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.ctitle{font-weight:600;font-size:1.02rem;letter-spacing:-.01em}
+.date{font-size:.83rem;color:var(--muted)}
+.chapcard:hover .ctitle{color:var(--accent)}
+.chaplist{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.chaplist a{
+  display:flex;gap:1rem;align-items:baseline;padding:.85rem 0;
+  border-bottom:1px solid var(--line);text-decoration:none;color:inherit;
+}
+.chaplist b{min-width:6.5rem;font-size:.9rem}
+.chaplist span{flex:1}
+.chaplist time{color:var(--muted);font-size:.85rem}
+.empty{color:var(--muted)}
+
+/* ----------------------------------------------------------- reader */
+body.reader{background:var(--reader-bg)}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:transparent}
+.progress-bar{height:100%;width:0;background:var(--accent);transition:width .08s linear}
+.readerbar{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;align-items:center;gap:1rem;
+  padding:.7rem 1.1rem;background:var(--bar);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:saturate(1.4) blur(8px);
+  transform:translateY(0);transition:transform .22s ease;
+}
+.readerbar.hidden{transform:translateY(-110%)}
+.readerbar .back{text-decoration:none;font-size:.88rem;white-space:nowrap}
+.rtitle{
+  flex:1;text-align:center;font-size:.88rem;color:var(--muted);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.helpbtn{
+  border:1px solid var(--line);background:transparent;color:var(--muted);
+  width:1.8rem;height:1.8rem;border-radius:4px;cursor:pointer;font-size:.85rem;
+}
+
+/* the seamless strip — the three lines that matter */
+.strip{
+  max-width:var(--strip);margin:0 auto;
+  font-size:0;line-height:0;background:#fff;
+}
+.strip img{display:block;width:100%;height:auto}
+.strip img + img{margin-top:-1px}
+
+.chapterend{
+  max-width:var(--strip);margin:0 auto;padding:2.5rem 1.25rem 5rem;
+  background:var(--bg);
+}
+.endmark{
+  text-align:center;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 2.5rem;font-weight:600;
+}
+.notes{border-top:1px solid var(--line);padding-top:1.6rem}
+.notesbody{font-size:1rem;line-height:1.7}
+.notesbody p{margin:0 0 1rem}
+.notesbody img{border-radius:4px;margin:.6rem 0}
+.extras{border-top:1px solid var(--line);margin-top:2rem;padding-top:1.6rem}
+.extragrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.9rem}
+.extragrid img{width:100%;height:auto;border:1px solid var(--line);border-radius:4px;display:block}
+.chnav{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  border-top:1px solid var(--line);margin-top:2.4rem;padding-top:1.4rem;font-size:.92rem;
+}
+.cn{text-decoration:none}
+.cn.mid{color:var(--muted)}
+.cn.ghost{flex:0 0 5rem}
+
+/* resume + help */
+.resume{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:1.2rem;z-index:70;
+  display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;justify-content:center;
+  background:var(--bg);border:1px solid var(--line);border-radius:6px;
+  padding:.7rem .9rem;font-size:.88rem;box-shadow:0 6px 24px rgba(0,0,0,.14);
+  max-width:calc(100vw - 2rem);
+}
+.resume button{
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  padding:.35rem .8rem;border-radius:4px;cursor:pointer;font-size:.85rem;font-weight:600;
+}
+.resume button.quiet{background:transparent;color:var(--muted);font-weight:400}
+.helppanel{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:80;
+  background:var(--bg);border:1px solid var(--line);border-radius:6px;
+  padding:1.4rem 1.6rem;box-shadow:0 10px 40px rgba(0,0,0,.22);min-width:260px;
+}
+.helppanel h3{margin:0 0 1rem;font-size:1rem}
+.helppanel dl{display:grid;grid-template-columns:auto 1fr;gap:.5rem 1.2rem;margin:0 0 1.2rem;align-items:baseline}
+.helppanel dt{white-space:nowrap}
+.helppanel dd{margin:0;color:var(--muted);font-size:.9rem}
+.helppanel button{
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  padding:.35rem .9rem;border-radius:4px;cursor:pointer;font-size:.85rem;
+}
+kbd{
+  font:inherit;font-size:.78rem;background:var(--surface);border:1px solid var(--line);
+  border-bottom-width:2px;border-radius:3px;padding:.08em .38em;
+}
+@media (max-width:520px){
+  .chapcard.wide{flex-direction:column;align-items:flex-start}
+  .chapcard.wide img{width:120px}
+  .chaplist a{flex-wrap:wrap;gap:.2rem 1rem}
+}

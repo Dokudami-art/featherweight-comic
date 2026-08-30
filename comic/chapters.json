@@ -1,0 +1,183 @@
+{
+  "site": {
+    "title": "Featherweight",
+    "tagline": "A vertical-scroll comic.",
+    "author": "Meg",
+    "description": ""
+  },
+  "chapters": [
+    {
+      "id": "ch01",
+      "number": 1,
+      "title": "Untitled",
+      "published": "2026-08-30",
+      "status": "published",
+      "cover": "cover.webp",
+      "width": 1600,
+      "totalHeight": 80000,
+      "quality": 88,
+      "slices": [
+        {
+          "file": "001.webp",
+          "h": 2000
+        },
+        {
+          "file": "002.webp",
+          "h": 2000
+        },
+        {
+          "file": "003.webp",
+          "h": 2000
+        },
+        {
+          "file": "004.webp",
+          "h": 2000
+        },
+        {
+          "file": "005.webp",
+          "h": 2000
+        },
+        {
+          "file": "006.webp",
+          "h": 2000
+        },
+        {
+          "file": "007.webp",
+          "h": 2000
+        },
+        {
+          "file": "008.webp",
+          "h": 2000
+        },
+        {
+          "file": "009.webp",
+          "h": 2000
+        },
+        {
+          "file": "010.webp",
+          "h": 2000
+        },
+        {
+          "file": "011.webp",
+          "h": 2000
+        },
+        {
+          "file": "012.webp",
+          "h": 2000
+        },
+        {
+          "file": "013.webp",
+          "h": 2000
+        },
+        {
+          "file": "014.webp",
+          "h": 2000
+        },
+        {
+          "file": "015.webp",
+          "h": 2000
+        },
+        {
+          "file": "016.webp",
+          "h": 2000
+        },
+        {
+          "file": "017.webp",
+          "h": 2000
+        },
+        {
+          "file": "018.webp",
+          "h": 2000
+        },
+        {
+          "file": "019.webp",
+          "h": 2000
+        },
+        {
+          "file": "020.webp",
+          "h": 2000
+        },
+        {
+          "file": "021.webp",
+          "h": 2000
+        },
+        {
+          "file": "022.webp",
+          "h": 2000
+        },
+        {
+          "file": "023.webp",
+          "h": 2000
+        },
+        {
+          "file": "024.webp",
+          "h": 2000
+        },
+        {
+          "file": "025.webp",
+          "h": 2000
+        },
+        {
+          "file": "026.webp",
+          "h": 2000
+        },
+        {
+          "file": "027.webp",
+          "h": 2000
+        },
+        {
+          "file": "028.webp",
+          "h": 2000
+        },
+        {
+          "file": "029.webp",
+          "h": 2000
+        },
+        {
+          "file": "030.webp",
+          "h": 2000
+        },
+        {
+          "file": "031.webp",
+          "h": 2000
+        },
+        {
+          "file": "032.webp",
+          "h": 2000
+        },
+        {
+          "file": "033.webp",
+          "h": 2000
+        },
+        {
+          "file": "034.webp",
+          "h": 2000
+        },
+        {
+          "file": "035.webp",
+          "h": 2000
+        },
+        {
+          "file": "036.webp",
+          "h": 2000
+        },
+        {
+          "file": "037.webp",
+          "h": 2000
+        },
+        {
+          "file": "038.webp",
+          "h": 2000
+        },
+        {
+          "file": "039.webp",
+          "h": 2000
+        },
+        {
+          "file": "040.webp",
+          "h": 2000
+        }
+      ]
+    }
+  ]
+}
