@@ -41,7 +41,7 @@ img{max-width:100%}
 
 /* ---------------------------------------------------------- site chrome */
 .sitenav{
-  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;
   max-width:var(--maxw);margin:0 auto;padding:1rem 1.25rem;
   border-bottom:1px solid var(--line);
 }
@@ -50,7 +50,7 @@ img{max-width:100%}
 }
 /* the lettering is black artwork; invert it to white on a dark ground */
 @media (prefers-color-scheme: dark){ .wordmark{filter:invert(1)} }
-.navlinks{display:flex;gap:1.2rem;font-size:.92rem}
+.navlinks{display:flex;gap:1.2rem;font-size:.92rem;padding-bottom:.15rem;flex:none}
 .navlinks a{text-decoration:none;color:var(--muted)}
 .navlinks a:hover,.navlinks a[aria-current]{color:var(--ink)}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 1.25rem 5rem}
@@ -226,6 +226,7 @@ kbd{
   border-bottom-width:2px;border-radius:3px;padding:.08em .38em;
 }
 @media (max-width:520px){
+  .sitenav{flex-wrap:wrap;align-items:flex-end;gap:.5rem 1rem}
   .chapcard.wide{flex-direction:column;align-items:flex-start}
   .chapcard.wide img{width:120px}
   .chaplist a{flex-wrap:wrap;gap:.2rem 1rem}
