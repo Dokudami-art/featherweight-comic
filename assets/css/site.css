@@ -59,17 +59,27 @@ img{max-width:100%}
   color:var(--muted);font-weight:600;margin:0 0 .9rem;
 }
 .pagetitle{font-size:1.9rem;letter-spacing:-.02em;margin:2.4rem 0 1.6rem}
+.pagehead{padding:3.2rem 0 2.4rem;border-bottom:1px solid var(--line)}
+.pagehead h1{font-size:clamp(2.2rem,6vw,3.2rem);letter-spacing:-.03em;margin:0;line-height:1.05}
+.blurb{
+  margin:1.1rem 0 0;max-width:36rem;color:var(--muted);
+  font-size:1.02rem;line-height:1.65;
+}
+.pagehead + .pagetitle{font-size:1.25rem;margin:2.2rem 0 1.4rem}
 
 /* ------------------------------------------------------------ home */
 .hero{padding:4rem 0 3rem;border-bottom:1px solid var(--line)}
 .hero h1{font-size:clamp(2.4rem,7vw,3.6rem);letter-spacing:-.03em;margin:0;line-height:1.05}
 .tagline{color:var(--muted);font-size:1.1rem;margin:.8rem 0 0;max-width:34rem}
+.herobtns{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.9rem}
 .btn{
-  display:inline-block;margin-top:1.8rem;padding:.75rem 1.5rem;
+  display:inline-block;padding:.75rem 1.5rem;
   background:var(--ink);color:var(--bg);text-decoration:none;
-  border-radius:4px;font-weight:600;font-size:.95rem;
+  border:1px solid var(--ink);border-radius:4px;font-weight:600;font-size:.95rem;
 }
 .btn:hover{opacity:.85}
+.btn.secondary{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.secondary:hover{opacity:1;border-color:var(--ink)}
 .latest,.recent{margin-top:2.6rem}
 .allink{margin-top:2.4rem;font-size:.92rem}
 .allink a{text-decoration:none}

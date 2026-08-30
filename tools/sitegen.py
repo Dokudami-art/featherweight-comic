@@ -62,7 +62,10 @@ def home(m):
     if site.get("tagline"):
         p.append(f'<p class="tagline">{e(site["tagline"])}</p>')
     if first:
-        p.append(f'<a class="btn" href="read/{first["id"]}/">Start reading</a>')
+        p.append('<div class="herobtns">')
+        p.append(f'<a class="btn" href="read/{first["id"]}/">Start from the beginning</a>')
+        p.append(f'<a class="btn secondary" href="read/{latest["id"]}/">Read the latest chapter</a>')
+        p.append('</div>')
     p.append('</section>')
 
     if latest:
@@ -93,10 +96,15 @@ def home(m):
 def chapters_page(m):
     chs = pub_chapters(m)
     p = [HEAD.format(title=f'Chapters &middot; {e(m["site"]["title"])}',
-                     desc="Every chapter of Featherweight.", root="", cls="page")]
+                     desc=e(m["site"].get("blurb", "")), root="", cls="page")]
     p.append(nav("", "chapters"))
     p.append('<main class="wrap">')
-    p.append('<h1 class="pagetitle">Chapters</h1>')
+    p.append('<header class="pagehead">')
+    p.append(f'<h1>{e(m["site"]["title"])}</h1>')
+    if m["site"].get("blurb"):
+        p.append(f'<p class="blurb">{e(m["site"]["blurb"])}</p>')
+    p.append('</header>')
+    p.append('<h2 class="pagetitle">Chapters</h2>')
     if not chs:
         p.append('<p class="empty">No chapters published yet.</p>')
     else:
