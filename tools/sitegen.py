@@ -146,7 +146,7 @@ def about_page(root: Path, m):
     p.append(nav("", "about"))
     p.append('<main class="wrap">')
     p.append('<header class="pagehead">')
-    p.append('<h1>About</h1>')
+    p.append('<h1>About the comic</h1>')
     if site.get("blurb"):
         p.append(f'<p class="blurb">{e(site["blurb"])}</p>')
     p.append('</header>')

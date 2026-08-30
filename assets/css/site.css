@@ -100,7 +100,7 @@ img{max-width:100%}
 /* --------------------------------------------------------- chapters */
 .abouttext{margin-top:2.2rem;max-width:36rem}
 .abouttext p{margin:0 0 1rem}
-.artist{margin-top:2.8rem;border-top:1px solid var(--line);padding-top:1.8rem}
+.artist{margin-top:2.4rem}
 .byline{font-size:1.35rem;font-weight:600;letter-spacing:-.02em;margin:0 0 1.2rem}
 .socials{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px;
   background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;max-width:26rem}
