@@ -25,8 +25,8 @@ def nav(root, here=""):
     def a(href, label, key):
         cur = ' aria-current="page"' if key == here else ""
         return f'<a href="{root}{href}"{cur}>{label}</a>'
-    return (f'<nav class="sitenav"><img class="wordmark" src="{root}assets/img/wordmark.png" '
-            f'alt="Featherweight" width="900" height="567">'
+    return (f'<nav class="sitenav"><img class="wordmark" src="{root}assets/img/wordmark.webp" '
+            f'alt="Featherweight" width="420" height="263">'
             f'<span class="navlinks">{a("index.html","Home","home")}'
             f'{a("chapters.html","Chapters","chapters")}'
             f'{a("about.html","About","about")}</span></nav>')

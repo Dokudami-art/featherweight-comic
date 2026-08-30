@@ -61,7 +61,7 @@ def main():
         (r'href="\.\./ch01/"',                'href="#" data-go="ch01"'),
     ]
 
-    blocks, total_imgs = [], 0
+    blocks, total_imgs, unresolved = [], 0, []
     for key, path in pages.items():
         cls, html = body_of(path)
         for pat, rep in LINKS:
@@ -75,10 +75,11 @@ def main():
             rel = re.sub(r"^(\.\./)+", "", src)
             f = ROOT / rel
             if not f.exists():
+                unresolved.append(src)
                 return m.group(0)
             total_imgs += 1
             return m.group(0).replace(src, data_uri(f, a.width, a.quality))
-        html = re.sub(r'src="([^"]+\.webp)"', swap, html)
+        html = re.sub(r'src="([^"]+\.(?:webp|png|jpe?g|gif|svg))"', swap, html)
         blocks.append(f'<div class="pv-page" id="pv-{key}" data-bodyclass="{cls}" hidden>{html}</div>')
         print(f"  packaged {key:9s} ({path.relative_to(ROOT)})")
 
@@ -142,6 +143,10 @@ def main():
 {js}
 </script>
 """
+    leftover = re.findall(r'src="(?!data:)([^"]+)"', out)
+    if unresolved or leftover:
+        sys.exit("REFUSING TO WRITE - these images were not inlined and would "
+                 "render as broken links:\n  " + "\n  ".join(sorted(set(unresolved + leftover))))
     Path(a.out).write_text(out, encoding="utf-8")
     mb = Path(a.out).stat().st_size / 1048576
     print(f"  {total_imgs} images inlined at {a.width}px q{a.quality}")
