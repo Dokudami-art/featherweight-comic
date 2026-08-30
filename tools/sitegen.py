@@ -72,8 +72,7 @@ def home(m):
     if first:
         p.append('<div class="herobtns">')
         p.append(f'<a class="btn" href="read/{first["id"]}/">Start Reading</a>')
-        newlbl = f'New Chapter: {latest["title"]}' if latest.get("title") else f'New Chapter: {latest["number"]}'
-        p.append(f'<a class="btn secondary" href="read/{latest["id"]}/">{e(newlbl)}</a>')
+        p.append(f'<a class="btn secondary" href="read/{latest["id"]}/">Newest Chapter</a>')
         p.append('</div>')
     p.append('</section>')
 
