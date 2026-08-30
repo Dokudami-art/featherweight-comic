@@ -106,15 +106,19 @@ def chapters_page(m):
     p.append(nav("", "chapters"))
     p.append('<main class="wrap">')
     p.append('<header class="pagehead">')
-    p.append(f'<h1>{e(m["site"]["title"])}</h1>')
+    p.append('<h1>Chapters</h1>')
     p.append('</header>')
-    p.append('<h2 class="pagetitle">Chapters</h2>')
     if not chs:
         p.append('<p class="empty">No chapters published yet.</p>')
     else:
+        p.append('<div class="sortbar"><span class="sortlabel">Sort</span>'
+                 '<div class="sortbtns" role="group" aria-label="Sort chapters">'
+                 '<button type="button" class="sortbtn" data-sort="newest" aria-pressed="true">Newest</button>'
+                 '<button type="button" class="sortbtn" data-sort="oldest" aria-pressed="false">Oldest</button>'
+                 '</div></div>')
         p.append('<div class="chapgrid">')
-        for c in chs:
-            p.append(f'<a class="chapcard" href="read/{c["id"]}/">')
+        for c in reversed(chs):            # newest first, matching the default control state
+            p.append(f'<a class="chapcard" href="read/{c["id"]}/" data-num="{c["number"]}">')
             p.append(f'<img src="comic/{c["id"]}/{c["cover"]}" alt="" '
                      f'width="800" height="800" loading="lazy">')
             p.append('<div class="chapmeta">'
@@ -123,6 +127,7 @@ def chapters_page(m):
                      f'<span class="date">{fmt_date(c.get("published"))}</span>'
                      '</div></a>')
         p.append('</div>')
+        p.append('<script src="assets/js/chapters.js"></script>')
     p.append('</main>')
     p.append(foot("", m))
     return "\n".join(p)

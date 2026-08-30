@@ -69,7 +69,16 @@ img{max-width:100%}
   margin:1.1rem 0 0;max-width:36rem;color:var(--muted);
   font-size:1.02rem;line-height:1.65;
 }
-.pagehead + .pagetitle{font-size:1.25rem;margin:2.2rem 0 1.4rem}
+.sortbar{display:flex;align-items:center;gap:.7rem;margin:1.8rem 0 1.4rem}
+.sortlabel{font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.sortbtns{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.sortbtn{
+  border:0;background:var(--bg);color:var(--muted);cursor:pointer;
+  font:inherit;font-size:.85rem;padding:.35rem .85rem;
+}
+.sortbtn + .sortbtn{border-left:1px solid var(--line)}
+.sortbtn:hover{color:var(--ink)}
+.sortbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 
 /* ------------------------------------------------------------ home */
 .hero{padding:4rem 0 3rem;border-bottom:1px solid var(--line)}

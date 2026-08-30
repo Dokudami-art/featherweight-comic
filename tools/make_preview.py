@@ -66,8 +66,7 @@ def main():
         cls, html = body_of(path)
         for pat, rep in LINKS:
             html = re.sub(pat, rep, html)
-        html = html.replace('<script src="../../assets/js/reader.js"', '<script data-removed="1" src="#"')
-        html = re.sub(r'<script data-removed="1".*?</script>', '', html, flags=re.S)
+        html = re.sub(r'<script\s+src="[^"]*\.js"[^>]*>\s*</script>', '', html, flags=re.S)
 
         def swap(m):
             nonlocal total_imgs
@@ -84,6 +83,7 @@ def main():
         print(f"  packaged {key:9s} ({path.relative_to(ROOT)})")
 
     css = (ROOT / "assets/css/site.css").read_text(encoding="utf-8")
+    chapters_js = (ROOT / "assets/js/chapters.js").read_text(encoding="utf-8")
 
     # ---- the real reader script, with navigation pointed at the router ----
     js = (ROOT / "assets/js/reader.js").read_text(encoding="utf-8")
@@ -141,6 +141,9 @@ def main():
   window.__pv("home");
 }})();
 {js}
+</script>
+<script>
+{chapters_js}
 </script>
 """
     leftover = re.findall(r'src="(?!data:)([^"]+)"', out)
