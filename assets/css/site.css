@@ -15,6 +15,8 @@
   --bar:rgba(255,255,255,.94);
   --maxw:940px;
   --strip:800px;         /* reading column width */
+  /* Wordmark face — swap this one line to change the logo font */
+  --wordmark-font:"Patrick Hand","Bradley Hand","Segoe Print",cursive;
 }
 @media (prefers-color-scheme: dark){
   :root{
@@ -45,7 +47,11 @@ img{max-width:100%}
   max-width:var(--maxw);margin:0 auto;padding:1.1rem 1.25rem;
   border-bottom:1px solid var(--line);
 }
-.wordmark{font-weight:700;font-size:1.05rem;letter-spacing:-.01em;text-decoration:none;color:var(--ink)}
+.wordmark{
+  font-family:var(--wordmark-font);
+  font-size:1.5rem;font-weight:400;letter-spacing:0;line-height:1;
+  color:var(--ink);white-space:nowrap;
+}
 .navlinks{display:flex;gap:1.2rem;font-size:.92rem}
 .navlinks a{text-decoration:none;color:var(--muted)}
 .navlinks a:hover,.navlinks a[aria-current]{color:var(--ink)}
@@ -70,7 +76,7 @@ img{max-width:100%}
 /* ------------------------------------------------------------ home */
 .hero{padding:4rem 0 3rem;border-bottom:1px solid var(--line)}
 .hero h1{font-size:clamp(2.4rem,7vw,3.6rem);letter-spacing:-.03em;margin:0;line-height:1.05}
-.tagline{color:var(--muted);font-size:1.1rem;margin:.8rem 0 0;max-width:34rem}
+.tagline{color:var(--muted);font-size:1.05rem;line-height:1.65;margin:1rem 0 0;max-width:38rem}
 .herobtns{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.9rem}
 .btn{
   display:inline-block;padding:.75rem 1.5rem;
@@ -85,6 +91,19 @@ img{max-width:100%}
 .allink a{text-decoration:none}
 
 /* --------------------------------------------------------- chapters */
+.abouttext{margin-top:2.2rem;max-width:36rem}
+.abouttext p{margin:0 0 1rem}
+.artist{margin-top:2.8rem;border-top:1px solid var(--line);padding-top:1.8rem}
+.byline{font-size:1.35rem;font-weight:600;letter-spacing:-.02em;margin:0 0 1.2rem}
+.socials{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;max-width:26rem}
+.socials a{display:flex;align-items:baseline;gap:.9rem;padding:.8rem 1rem;
+  background:var(--bg);text-decoration:none;color:inherit}
+.socials a:hover{background:var(--surface)}
+.socials .net{min-width:5.5rem;font-weight:600;font-size:.92rem}
+.socials .handle{color:var(--muted);font-size:.9rem}
+.socials a:hover .handle{color:var(--accent)}
+
 .chapgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.4rem}
 .chapcard{text-decoration:none;color:inherit;display:block}
 .chapcard img{
@@ -164,7 +183,7 @@ body.reader{background:var(--reader-bg)}
 .cn.ghost{flex:0 0 5rem}
 .totop{
   display:block;text-align:center;text-decoration:none;
-  margin-top:2rem;padding:.6rem;color:var(--muted);font-size:.88rem;
+  margin:-1.4rem 0 2.4rem;padding:.6rem;color:var(--muted);font-size:.88rem;
 }
 .totop .arrow{display:block;font-size:1.15rem;line-height:1;margin-bottom:.2rem}
 .totop:hover{color:var(--accent)}

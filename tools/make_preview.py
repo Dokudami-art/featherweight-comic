@@ -102,6 +102,9 @@ def main():
         js = js.replace(old, new, 1)
 
     out = f"""<title>Featherweight Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap">
 <style>
 {css}
 /* ---- preview shell only: not part of the real site ---- */

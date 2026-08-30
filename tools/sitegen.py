@@ -16,6 +16,9 @@ HEAD = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap">
 <link rel="stylesheet" href="{root}assets/css/site.css">
 </head>
 <body class="{cls}">
@@ -25,13 +28,16 @@ def nav(root, here=""):
     def a(href, label, key):
         cur = ' aria-current="page"' if key == here else ""
         return f'<a href="{root}{href}"{cur}>{label}</a>'
-    return (f'<nav class="sitenav"><a class="wordmark" href="{root}index.html">Featherweight</a>'
-            f'<span class="navlinks">{a("chapters.html","Chapters","chapters")}'
+    return ('<nav class="sitenav"><span class="wordmark">Featherweight Comic</span>'
+            f'<span class="navlinks">{a("index.html","Home","home")}'
+            f'{a("chapters.html","Chapters","chapters")}'
             f'{a("about.html","About","about")}</span></nav>')
 
-def foot(root):
-    return ('<footer class="sitefoot"><p>Featherweight &middot; '
-            'made by Meg</p></footer>\n</body>\n</html>\n')
+def foot(root, m=None):
+    who = e(m["site"].get("author", "")) if m else ""
+    by = f' &middot; by {who}' if who else ""
+    return (f'<footer class="sitefoot"><p>Featherweight{by}</p></footer>'
+            '\n</body>\n</html>\n')
 
 def e(s):
     return html.escape(str(s or ""), quote=True)
@@ -53,18 +59,21 @@ def fmt_date(d):
 def home(m):
     site, chs = m["site"], pub_chapters(m)
     first, latest = (chs[0], chs[-1]) if chs else (None, None)
-    p = [HEAD.format(title=e(site["title"]), desc=e(site.get("tagline","")),
+    p = [HEAD.format(title=e(site["title"]),
+                     desc=e(site.get("blurb") or site.get("tagline", "")),
                      root="", cls="page")]
     p.append(nav("", "home"))
     p.append('<main class="wrap">')
     p.append('<section class="hero">')
     p.append(f'<h1>{e(site["title"])}</h1>')
-    if site.get("tagline"):
-        p.append(f'<p class="tagline">{e(site["tagline"])}</p>')
+    intro = site.get("blurb") or site.get("tagline", "")
+    if intro:
+        p.append(f'<p class="tagline">{e(intro)}</p>')
     if first:
         p.append('<div class="herobtns">')
-        p.append(f'<a class="btn" href="read/{first["id"]}/">Start from the beginning</a>')
-        p.append(f'<a class="btn secondary" href="read/{latest["id"]}/">Read the latest chapter</a>')
+        p.append(f'<a class="btn" href="read/{first["id"]}/">Start Reading</a>')
+        newlbl = f'New Chapter: {latest["title"]}' if latest.get("title") else f'New Chapter: {latest["number"]}'
+        p.append(f'<a class="btn secondary" href="read/{latest["id"]}/">{e(newlbl)}</a>')
         p.append('</div>')
     p.append('</section>')
 
@@ -89,7 +98,7 @@ def home(m):
 
     p.append(f'<p class="allink"><a href="chapters.html">All chapters &rarr;</a></p>')
     p.append('</main>')
-    p.append(foot(""))
+    p.append(foot("", m))
     return "\n".join(p)
 
 # -------------------------------------------------------------- chapters
@@ -101,8 +110,6 @@ def chapters_page(m):
     p.append('<main class="wrap">')
     p.append('<header class="pagehead">')
     p.append(f'<h1>{e(m["site"]["title"])}</h1>')
-    if m["site"].get("blurb"):
-        p.append(f'<p class="blurb">{e(m["site"]["blurb"])}</p>')
     p.append('</header>')
     p.append('<h2 class="pagetitle">Chapters</h2>')
     if not chs:
@@ -120,7 +127,44 @@ def chapters_page(m):
                      '</div></a>')
         p.append('</div>')
     p.append('</main>')
-    p.append(foot(""))
+    p.append(foot("", m))
+    return "\n".join(p)
+
+# ------------------------------------------------------------------ about
+def about_page(root: Path, m):
+    site = m["site"]
+    body = ""
+    f = root / "about-text.html"
+    if f.exists():
+        raw = f.read_text(encoding="utf-8")
+        body = raw.split("-->", 1)[-1].strip() if "-->" in raw else raw.strip()
+
+    p = [HEAD.format(title=f'About &middot; {e(site["title"])}',
+                     desc=e(site.get("blurb", "")), root="", cls="page")]
+    p.append(nav("", "about"))
+    p.append('<main class="wrap">')
+    p.append('<header class="pagehead">')
+    p.append('<h1>About</h1>')
+    if site.get("blurb"):
+        p.append(f'<p class="blurb">{e(site["blurb"])}</p>')
+    p.append('</header>')
+
+    if body:
+        p.append(f'<section class="abouttext">{body}</section>')
+
+    p.append('<section class="artist">')
+    p.append('<h2 class="lede">Elsewhere</h2>')
+    socials = site.get("socials", [])
+    if socials:
+        p.append('<ul class="socials">')
+        for sc in socials:
+            p.append(f'<li><a href="{e(sc["url"])}" target="_blank" rel="noopener noreferrer">'
+                     f'<span class="net">{e(sc["name"])}</span>'
+                     f'<span class="handle">{e(sc["handle"])}</span></a></li>')
+        p.append('</ul>')
+    p.append('</section>')
+    p.append('</main>')
+    p.append(foot("", m))
     return "\n".join(p)
 
 # ---------------------------------------------------------------- reader
@@ -172,6 +216,8 @@ def reader(root_dir: Path, m, ch):
 
     p.append('<section class="chapterend">')
     p.append(f'<p class="endmark">End of Chapter {ch["number"]}</p>')
+    p.append('<a class="totop" href="#top">'
+             '<span class="arrow" aria-hidden="true">&uarr;</span>Back to top</a>')
     if notes.strip():
         p.append('<div class="notes"><h2 class="lede">Notes</h2>'
                  f'<div class="notesbody">{notes}</div></div>')
@@ -188,8 +234,6 @@ def reader(root_dir: Path, m, ch):
     p.append(f'<a class="cn next" href="../{nxt["id"]}/">Ch. {nxt["number"]} &rarr;</a>'
              if nxt else '<span class="cn ghost"></span>')
     p.append('</nav>')
-    p.append('<a class="totop" href="#top">'
-             '<span class="arrow" aria-hidden="true">&uarr;</span>Back to top</a>')
     p.append('</section>')
     p.append('</main>')
 
@@ -216,6 +260,15 @@ def reader(root_dir: Path, m, ch):
 def build_site(root: Path, m: dict):
     (root / "index.html").write_text(home(m), encoding="utf-8")
     (root / "chapters.html").write_text(chapters_page(m), encoding="utf-8")
+    at = root / "about-text.html"
+    if not at.exists():
+        at.write_text(
+            "<!-- Anything you want to say on the About page, in your own words.\n"
+            "     Plain HTML: <p>, <b>, <i>, <a>, <h2 class=\"lede\">Heading</h2>.\n"
+            "     Leave it empty and the page just shows the blurb and your links.\n"
+            "     Created once — a rebuild never overwrites it. -->\n", encoding="utf-8")
+        print("      created about-text.html (yours - never overwritten)")
+    (root / "about.html").write_text(about_page(root, m), encoding="utf-8")
     for ch in m["chapters"]:
         d = root / "read" / ch["id"]
         d.mkdir(parents=True, exist_ok=True)
