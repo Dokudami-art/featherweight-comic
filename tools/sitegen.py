@@ -143,6 +143,7 @@ def reader(root_dir: Path, m, ch):
     title = f'Chapter {ch["number"]}: {e(ch["title"])} &middot; {e(m["site"]["title"])}'
     p = [HEAD.format(title=title, desc=e(ch["title"]), root="../../", cls="reader")]
     p.append('<div class="progress"><div class="progress-bar" id="pbar"></div></div>')
+    p.append('<span id="top"></span>')
     p.append('<header class="readerbar" id="readerbar">')
     p.append('<a class="back" href="../../chapters.html">&larr; Chapters</a>')
     p.append(f'<span class="rtitle">Ch. {ch["number"]} &mdash; {e(ch["title"])}</span>')
@@ -179,6 +180,8 @@ def reader(root_dir: Path, m, ch):
     p.append(f'<a class="cn next" href="../{nxt["id"]}/">Ch. {nxt["number"]} &rarr;</a>'
              if nxt else '<span class="cn ghost"></span>')
     p.append('</nav>')
+    p.append('<a class="totop" href="#top">'
+             '<span class="arrow" aria-hidden="true">&uarr;</span>Back to top</a>')
     p.append('</section>')
     p.append('</main>')
 

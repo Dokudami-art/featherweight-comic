@@ -152,6 +152,12 @@ body.reader{background:var(--reader-bg)}
 .cn{text-decoration:none}
 .cn.mid{color:var(--muted)}
 .cn.ghost{flex:0 0 5rem}
+.totop{
+  display:block;text-align:center;text-decoration:none;
+  margin-top:2rem;padding:.6rem;color:var(--muted);font-size:.88rem;
+}
+.totop .arrow{display:block;font-size:1.15rem;line-height:1;margin-bottom:.2rem}
+.totop:hover{color:var(--accent)}
 
 /* resume + help */
 .resume{

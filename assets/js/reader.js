@@ -94,5 +94,13 @@
     }
   });
 
+  /* ---- back to top ---- */
+  var totop = document.querySelector(".totop");
+  if (totop) totop.addEventListener("click", function (ev) {
+    ev.preventDefault();
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+
   onScroll();
 })();
