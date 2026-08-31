@@ -1,35 +1,18 @@
-/* Featherweight reader — progress, auto-hiding bar, keyboard nav, resume.
-   Everything here is an enhancement: with JS off the chapter still reads. */
+/* Featherweight reader — progress bar, auto-hiding header, keyboard nav,
+   back to top. Everything here is an enhancement: with JS off the chapter
+   still reads top to bottom. */
 (function () {
   "use strict";
   var tag  = document.currentScript;
-  var id   = tag.dataset.chapter || "ch";
   var prev = tag.dataset.prev || "";
   var next = tag.dataset.next || "";
-  var KEY  = "fw:pos:" + id;
 
-  var bar    = document.getElementById("readerbar");
-  var pbar   = document.getElementById("pbar");
-  var resume = document.getElementById("resume");
-  var help   = document.getElementById("helppanel");
-
-  /* We manage the scroll position ourselves, so the browser must not also
-     restore it - otherwise the two fight and the prompt never appears. */
-  try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
-
-  var MIN_SAVE = 0.02;   /* never persist a position this close to the top */
+  var bar  = document.getElementById("readerbar");
+  var pbar = document.getElementById("pbar");
+  var help = document.getElementById("helppanel");
 
   function maxScroll() {
     return Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-  }
-  function frac() { return window.scrollY / maxScroll(); }
-
-  /* Writing a near-zero value is what used to erase a real bookmark: arriving
-     at a chapter puts you at the top, and any save from there overwrote it. */
-  function persist() {
-    var f = frac();
-    if (f <= MIN_SAVE) return;
-    try { localStorage.setItem(KEY, f.toFixed(4)); } catch (e) {}
   }
 
   /* ---- progress bar + auto-hiding header ---- */
@@ -39,7 +22,7 @@
     ticking = true;
     requestAnimationFrame(function () {
       var y = window.scrollY;
-      pbar.style.width = Math.min(100, frac() * 100).toFixed(2) + "%";
+      pbar.style.width = Math.min(100, (y / maxScroll()) * 100).toFixed(2) + "%";
       if (y > lastY + 6 && y > 300) bar.classList.add("hidden");
       else if (y < lastY - 6) bar.classList.remove("hidden");
       lastY = y;
@@ -48,36 +31,6 @@
   }
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
-
-  /* ---- remember position ---- */
-  var saveTimer;
-  function save() {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(persist, 400);
-  }
-  window.addEventListener("scroll", save, { passive: true });
-  window.addEventListener("pagehide", persist);
-  document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "hidden") persist();
-  });
-
-  /* ---- offer to resume ---- */
-  var saved = 0;
-  try { saved = parseFloat(localStorage.getItem(KEY) || "0"); } catch (e) {}
-  if (resume && saved > 0.04 && saved < 0.95 && window.scrollY < 40) {
-    resume.hidden = false;
-    document.getElementById("resumego").addEventListener("click", function () {
-      window.scrollTo({ top: saved * maxScroll(), behavior: "auto" });
-      resume.hidden = true;
-    });
-    document.getElementById("resumeno").addEventListener("click", function () {
-      try { localStorage.removeItem(KEY); } catch (e) {}
-      resume.hidden = true;
-    });
-    var dismiss = document.getElementById("resumeclose");
-    if (dismiss) dismiss.addEventListener("click", function () { resume.hidden = true; });
-    setTimeout(function () { resume.hidden = true; }, 15000);
-  }
 
   /* ---- help panel ---- */
   function toggleHelp(on) {
@@ -88,6 +41,16 @@
   if (hb) hb.addEventListener("click", function () { toggleHelp(); });
   var hc = document.getElementById("helpclose");
   if (hc) hc.addEventListener("click", function () { toggleHelp(false); });
+
+  /* ---- back to top ---- */
+  var totop = document.querySelector(".totop");
+  if (totop) totop.addEventListener("click", function (ev) {
+    ev.preventDefault();
+    /* Instant, deliberately. A chapter is ~40,000px tall: an animated scroll
+       that far is either ignored outright by the browser or forces it to
+       decode every image on the way past, which locks the page up. */
+    window.scrollTo({ top: 0, behavior: "instant" });
+  });
 
   /* ---- keyboard ---- */
   function go(where) { if (where) location.href = "../" + where; }
@@ -105,16 +68,8 @@
       case "]": go(next); break;
       case "c": case "C": location.href = "../../chapters.html"; break;
       case "?": toggleHelp(); ev.preventDefault(); break;
-      case "Escape": toggleHelp(false); if (resume) resume.hidden = true; break;
+      case "Escape": toggleHelp(false); break;
     }
-  });
-
-  /* ---- back to top ---- */
-  var totop = document.querySelector(".totop");
-  if (totop) totop.addEventListener("click", function (ev) {
-    ev.preventDefault();
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
   });
 
   onScroll();

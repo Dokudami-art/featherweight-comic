@@ -244,11 +244,6 @@ def reader(root_dir: Path, m, ch):
     p.append('</section>')
     p.append('</main>')
 
-    p.append('<div class="resume" id="resume" hidden>'
-             '<span>You were partway through this chapter.</span>'
-             '<button id="resumego">Jump back</button>'
-             '<button id="resumeno" class="quiet">Start over</button>'
-             '<button id="resumeclose" class="close" aria-label="Dismiss">&times;</button></div>')
     p.append('<div class="helppanel" id="helppanel" hidden><h3>Shortcuts</h3><dl>'
              '<dt><kbd>J</kbd> <kbd>&darr;</kbd></dt><dd>Down</dd>'
              '<dt><kbd>K</kbd> <kbd>&uarr;</kbd></dt><dd>Up</dd>'

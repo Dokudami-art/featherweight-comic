@@ -32,10 +32,11 @@
 }
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+/* No global smooth scrolling: over a 40,000px chapter the browser ignores it,
+   which also breaks the no-JS "back to top" anchor. Short, deliberate smooth
+   scrolls are requested explicitly in reader.js instead. */
 @media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *{animation:none!important;transition:none!important}
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
 body{
   margin:0;background:var(--bg);color:var(--ink);
@@ -213,24 +214,7 @@ body.reader{background:var(--reader-bg)}
 .totop .arrow{display:block;font-size:1.15rem;line-height:1;margin-bottom:.2rem}
 .totop:hover{color:var(--accent)}
 
-/* resume + help */
-.resume{
-  position:fixed;left:50%;transform:translateX(-50%);bottom:1.2rem;z-index:70;
-  display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;justify-content:center;
-  background:var(--bg);border:1px solid var(--line);border-radius:6px;
-  padding:.7rem .9rem;font-size:.88rem;box-shadow:0 6px 24px rgba(0,0,0,.14);
-  max-width:calc(100vw - 2rem);
-}
-.resume button{
-  border:1px solid var(--line);background:var(--surface);color:var(--ink);
-  padding:.35rem .8rem;border-radius:4px;cursor:pointer;font-size:.85rem;font-weight:600;
-}
-.resume button.quiet{background:transparent;color:var(--muted);font-weight:400}
-.resume button.close{
-  border:0;background:transparent;color:var(--muted);font-weight:400;
-  font-size:1.05rem;line-height:1;padding:.2rem .35rem;margin-left:.1rem;
-}
-.resume button.close:hover{color:var(--ink)}
+/* help panel */
 .helppanel{
   position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:80;
   background:var(--bg);border:1px solid var(--line);border-radius:6px;
