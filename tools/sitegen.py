@@ -16,6 +16,7 @@ HEAD = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+<script>(function(){{try{{var t=localStorage.getItem("fw:theme");if(t)document.documentElement.setAttribute("data-theme",t);}}catch(e){{}}}})();</script>
 <link rel="stylesheet" href="{root}assets/css/site.css">
 </head>
 <body class="{cls}">
@@ -29,12 +30,15 @@ def nav(root, here=""):
             f'alt="Featherweight" width="420" height="263">'
             f'<span class="navlinks">{a("index.html","Home","home")}'
             f'{a("chapters.html","Chapters","chapters")}'
-            f'{a("about.html","About","about")}</span></nav>')
+            f'{a("about.html","About","about")}'
+            '<button class="themetoggle" type="button" aria-label="Switch theme">&#9789;</button>'
+            '</span></nav>')
 
 def foot(root, m=None):
     who = e(m["site"].get("author", "")) if m else ""
     by = f' &middot; by {who}' if who else ""
     return (f'<footer class="sitefoot"><p>Featherweight{by}</p></footer>'
+            '\n<script src="' + root + 'assets/js/theme.js"></script>'
             '\n</body>\n</html>\n')
 
 def e(s):
@@ -201,6 +205,7 @@ def reader(root_dir: Path, m, ch):
     p.append('<header class="readerbar" id="readerbar">')
     p.append('<a class="back" href="../../chapters.html">&larr; Chapters</a>')
     p.append(f'<span class="rtitle">Ch. {ch["number"]} &mdash; {e(ch["title"])}</span>')
+    p.append('<button class="themetoggle" type="button" aria-label="Switch theme">&#9789;</button>')
     p.append('<button class="helpbtn" id="helpbtn" aria-label="Keyboard shortcuts" '
              'title="Keyboard shortcuts">?</button>')
     p.append('</header>')
@@ -242,7 +247,8 @@ def reader(root_dir: Path, m, ch):
     p.append('<div class="resume" id="resume" hidden>'
              '<span>You were partway through this chapter.</span>'
              '<button id="resumego">Jump back</button>'
-             '<button id="resumeno" class="quiet">Start over</button></div>')
+             '<button id="resumeno" class="quiet">Start over</button>'
+             '<button id="resumeclose" class="close" aria-label="Dismiss">&times;</button></div>')
     p.append('<div class="helppanel" id="helppanel" hidden><h3>Shortcuts</h3><dl>'
              '<dt><kbd>J</kbd> <kbd>&darr;</kbd></dt><dd>Down</dd>'
              '<dt><kbd>K</kbd> <kbd>&uarr;</kbd></dt><dd>Up</dd>'
@@ -255,6 +261,7 @@ def reader(root_dir: Path, m, ch):
     p.append(f'<script src="../../assets/js/reader.js" data-chapter="{ch["id"]}" '
              f'data-prev="{prev["id"] + "/" if prev else ""}" '
              f'data-next="{nxt["id"] + "/" if nxt else ""}"></script>')
+    p.append('<script src="../../assets/js/theme.js"></script>')
     p.append('</body>\n</html>')
     return "\n".join(p)
 

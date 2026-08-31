@@ -84,6 +84,7 @@ def main():
 
     css = (ROOT / "assets/css/site.css").read_text(encoding="utf-8")
     chapters_js = (ROOT / "assets/js/chapters.js").read_text(encoding="utf-8")
+    theme_js    = (ROOT / "assets/js/theme.js").read_text(encoding="utf-8")
 
     # ---- the real reader script, with navigation pointed at the router ----
     js = (ROOT / "assets/js/reader.js").read_text(encoding="utf-8")
@@ -144,6 +145,9 @@ def main():
 </script>
 <script>
 {chapters_js}
+</script>
+<script>
+{theme_js}
 </script>
 """
     leftover = re.findall(r'src="(?!data:)([^"]+)"', out)

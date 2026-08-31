@@ -13,10 +13,24 @@
   var resume = document.getElementById("resume");
   var help   = document.getElementById("helppanel");
 
+  /* We manage the scroll position ourselves, so the browser must not also
+     restore it - otherwise the two fight and the prompt never appears. */
+  try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
+
+  var MIN_SAVE = 0.02;   /* never persist a position this close to the top */
+
   function maxScroll() {
     return Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
   }
   function frac() { return window.scrollY / maxScroll(); }
+
+  /* Writing a near-zero value is what used to erase a real bookmark: arriving
+     at a chapter puts you at the top, and any save from there overwrote it. */
+  function persist() {
+    var f = frac();
+    if (f <= MIN_SAVE) return;
+    try { localStorage.setItem(KEY, f.toFixed(4)); } catch (e) {}
+  }
 
   /* ---- progress bar + auto-hiding header ---- */
   var lastY = window.scrollY, ticking = false;
@@ -39,13 +53,12 @@
   var saveTimer;
   function save() {
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(function () {
-      try { localStorage.setItem(KEY, frac().toFixed(4)); } catch (e) {}
-    }, 400);
+    saveTimer = setTimeout(persist, 400);
   }
   window.addEventListener("scroll", save, { passive: true });
-  window.addEventListener("pagehide", function () {
-    try { localStorage.setItem(KEY, frac().toFixed(4)); } catch (e) {}
+  window.addEventListener("pagehide", persist);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "hidden") persist();
   });
 
   /* ---- offer to resume ---- */
@@ -61,7 +74,9 @@
       try { localStorage.removeItem(KEY); } catch (e) {}
       resume.hidden = true;
     });
-    setTimeout(function () { resume.hidden = true; }, 12000);
+    var dismiss = document.getElementById("resumeclose");
+    if (dismiss) dismiss.addEventListener("click", function () { resume.hidden = true; });
+    setTimeout(function () { resume.hidden = true; }, 15000);
   }
 
   /* ---- help panel ---- */
