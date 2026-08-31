@@ -1,0 +1,50 @@
+Featherweight — how to push this to GitHub
+==========================================
+
+Everything is already committed and the remote is already pointed at your repo.
+Nothing needs building. You only need to send it.
+
+The repo is: https://github.com/Dokudami-art/featherweight-comic  (public, empty)
+
+
+EASIEST — GitHub Desktop
+------------------------
+1. Unzip this folder somewhere sensible (e.g. your Featherweight Comic folder).
+2. Open GitHub Desktop.
+3. File > Add Local Repository... > choose the unzipped "featherweight-site" folder.
+4. Click "Publish repository" or "Push origin".
+   It already knows where to go.
+
+
+OR — Terminal
+-------------
+Open Terminal, then (adjust the path to wherever you unzipped it):
+
+    cd ~/Desktop/"CLAUDE FILES"/"Featherweight Comic"/featherweight-site
+    git push -u origin main
+
+When it asks for credentials:
+    Username: Megumirandall
+    Password: paste the access token (NOT your GitHub password)
+
+
+AFTER IT'S PUSHED — turn the website on
+---------------------------------------
+1. Go to: https://github.com/Dokudami-art/featherweight-comic/settings/pages
+2. Under "Build and deployment" > Source, choose "Deploy from a branch".
+3. Branch: main   Folder: / (root)   then Save.
+4. Wait 1-2 minutes.
+
+Your site will be live at:
+    https://dokudami-art.github.io/featherweight-comic/
+
+Then DELETE the access token:
+    https://github.com/settings/personal-access-tokens
+It has done its job and nothing breaks without it.
+
+
+PUBLISHING FUTURE CHAPTERS
+--------------------------
+See README.md in this folder. Short version:
+    put strips in source/ch02/ , then
+    ./tools/publish.sh ch02 --title "Your chapter title"
