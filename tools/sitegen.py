@@ -78,26 +78,19 @@ def home(m):
         p.append('</div>')
     p.append('</section>')
 
-    if latest:
-        p.append('<section class="latest"><h2 class="lede">Latest chapter</h2>')
-        p.append(f'<a class="chapcard wide" href="read/{latest["id"]}/">')
-        p.append(f'<img src="comic/{latest["id"]}/{latest["cover"]}" alt="" '
-                 f'width="800" height="800" loading="lazy">')
-        p.append('<div class="chapmeta">'
-                 f'<span class="num">Chapter {latest["number"]}</span>'
-                 f'<span class="ctitle">{e(latest["title"])}</span>'
-                 f'<span class="date">{fmt_date(latest.get("published"))}</span>'
-                 '</div></a></section>')
+    if chs:
+        p.append('<section class="latest"><h2 class="lede">Chapters</h2><div class="chapgrid">')
+        for c in reversed(chs):            # newest first
+            p.append(f'<a class="chapcard" href="read/{c["id"]}/">')
+            p.append(f'<img src="comic/{c["id"]}/{c["cover"]}" alt="" '
+                     f'width="800" height="800" loading="lazy">')
+            p.append('<div class="chapmeta">'
+                     f'<span class="num">Chapter {c["number"]}</span>'
+                     f'<span class="ctitle">{e(c["title"])}</span>'
+                     f'<span class="date">{fmt_date(c.get("published"))}</span>'
+                     '</div></a>')
+        p.append('</div></section>')
 
-    if len(chs) > 1:
-        p.append('<section class="recent"><h2 class="lede">Recent</h2><ul class="chaplist">')
-        for c in reversed(chs[:-1][-3:]):
-            p.append(f'<li><a href="read/{c["id"]}/"><b>Chapter {c["number"]}</b>'
-                     f'<span>{e(c["title"])}</span>'
-                     f'<time>{fmt_date(c.get("published"))}</time></a></li>')
-        p.append('</ul></section>')
-
-    p.append(f'<p class="allink"><a href="chapters.html">All chapters &rarr;</a></p>')
     p.append('</main>')
     p.append(foot("", m))
     return "\n".join(p)
